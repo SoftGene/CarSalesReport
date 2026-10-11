@@ -11,8 +11,8 @@ namespace CarSalesReport
     /// </summary>
     public partial class MainWindow : Window
     {
-        public readonly SalesReader _reader = new();
-        public readonly SalesCalculator _calculate = new();
+        private readonly SalesReader _reader = new();
+        private readonly SalesCalculator _calculator = new();
 
         public MainWindow()
         {
@@ -35,7 +35,7 @@ namespace CarSalesReport
             try
             {
                 List<Sale> sales = _reader.Load(dialog.FileName);
-                List<ModelSummary> summary = _calculate.Calculate(sales);
+                List<ModelSummary> summary = _calculator.Calculate(sales);
 
                 SalesGrid.ItemsSource = sales;
                 SummaryList.ItemsSource = summary;
@@ -43,7 +43,7 @@ namespace CarSalesReport
             }
             catch(Exception ex) when (ex is XmlException or FormatException or NullReferenceException)
             {
-                MessageBox.Show($"Soubor se nepodarilo nacit: {ex.Message}", "Chyba", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show($"Soubor se nepodařilo načíst: {ex.Message}", "Chyba", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
     }
