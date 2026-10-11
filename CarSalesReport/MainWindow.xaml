@@ -1,0 +1,58 @@
+﻿<Window x:Class="CarSalesReport.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Prodeje vozů" Height="550" Width="900"
+        Language="cs-CZ">
+
+    <DockPanel Margin="10">
+
+        <!-- Horní řádek: tlačítko a cesta k souboru -->
+        <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="0,0,0,10">
+            <Button Content="Otevřít XML…" Padding="12,4" Click="OpenFile_Click"/>
+            <TextBlock x:Name="FilePathText" Margin="10,0,0,0" VerticalAlignment="Center"
+                       Text="Není vybrán žádný soubor"/>
+        </StackPanel>
+
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="3*"/>
+                <ColumnDefinition Width="2*"/>
+            </Grid.ColumnDefinitions>
+
+            <!-- Vlevo: všechny prodeje ze souboru -->
+            <GroupBox Header="Prodeje" Grid.Column="0" Margin="0,0,10,0">
+                <DataGrid x:Name="SalesGrid" AutoGenerateColumns="False" IsReadOnly="True">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="Model" Binding="{Binding Model}" Width="*"/>
+                        <DataGridTextColumn Header="Datum" Binding="{Binding Date, StringFormat=d. M. yyyy}"/>
+                        <DataGridTextColumn Header="Cena" Binding="{Binding Price, StringFormat=N2}"/>
+                        <DataGridTextColumn Header="DPH %" Binding="{Binding Dph}"/>
+                    </DataGrid.Columns>
+                </DataGrid>
+            </GroupBox>
+
+            <!-- Vpravo: součty za víkendy ve formátu ze zadání -->
+            <GroupBox Header="Prodeje o víkendu" Grid.Column="1">
+                <ItemsControl x:Name="SummaryList">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Border BorderBrush="LightGray" BorderThickness="0,0,0,1" Padding="4">
+                                <StackPanel>
+                                    <TextBlock Text="{Binding Model}" FontWeight="Bold"/>
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition/>
+                                            <ColumnDefinition/>
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock Text="{Binding Price, StringFormat=Bez DPH: {0:N2}}"/>
+                                        <TextBlock Grid.Column="1" Text="{Binding TotalPrice, StringFormat=S DPH: {0:N2}}"/>
+                                    </Grid>
+                                </StackPanel>
+                            </Border>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </GroupBox>
+        </Grid>
+    </DockPanel>
+</Window>
